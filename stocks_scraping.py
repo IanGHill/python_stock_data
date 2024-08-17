@@ -9,6 +9,8 @@ url = "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDev
 data  = requests.get(url).text
 
 soup = BeautifulSoup(data, 'html.parser')
+title = soup.find_all(name='title')
+print(title)
 netflix_data = pd.DataFrame(columns=["Date", "Open", "High", "Low", "Close", "Volume"])
 
 # First we isolate the body of the table which contains all the information
@@ -26,3 +28,8 @@ for row in soup.find("tbody").find_all('tr'):
     # Finally we append the data of each row to the table
     netflix_data = pd.concat([netflix_data,pd.DataFrame({"Date":[date], "Open":[Open], "High":[high], "Low":[low], "Close":[close], "Adj Close":[adj_close], "Volume":[volume]})], ignore_index=True)    
 print(netflix_data.head())
+print(netflix_data.columns)
+print(netflix_data.iloc[-1]['Open'])
+
+# You can also convert the beautiful soup objext into a string to read in pandas:
+read_html_pandas_data = pd.read_html(str(soup))
